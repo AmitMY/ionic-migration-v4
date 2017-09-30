@@ -1,0 +1,16 @@
+{
+  "name": "ionic-migration-v4",
+  "version": "0.0.1",
+  "description": "Migrate ionic v3 to ionic v4",
+  "main": "migrate.js",
+  "dependencies": {
+    "ncp": "^2.0.0",
+    "replace": "^0.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AmitMY",
+  "license": "MIT"
+}
