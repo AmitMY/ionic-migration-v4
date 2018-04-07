@@ -4,6 +4,7 @@
   "description": "Migrate ionic v3 to ionic v4",
   "main": "migrate.js",
   "dependencies": {
+    "find-in-files": "^0.5.0",
     "ncp": "^2.0.0",
     "replace": "^0.3.0"
   },

@@ -1,5 +1,9 @@
 const replace = require('replace');
 const ncp = require('ncp').ncp;
+const fs = require('fs');
+const getVariables = require('./variables');
+
+const deprecatedVariables = new Set(JSON.parse(fs.readFileSync("variables.json")));
 
 console.log('-'.repeat(20));
 console.log('This automatic migration disregards any code styling, Including but not limited to:');
@@ -8,6 +12,7 @@ console.log('- Spaces');
 console.log('And you probably want to run your IDE code reformatting after it.');
 console.log('-'.repeat(20));
 console.log('');
+
 
 // Copy folder
 ncp.limit = 16;
@@ -100,15 +105,25 @@ ncp('v3', 'v4', function (err) {
       console.log('-'.repeat(10));
     });
 
-    console.log('-'.repeat(20));
+
+    getVariables("v4")
+      .then(v => {
+        const inter = Array.from(v).filter(a => deprecatedVariables.has(a));
+        if(inter.length > 0) {
+          console.warn('-'.repeat(10));
+          console.warn("You are using deprecated ionic scss variables:");
+          inter.forEach(a => console.warn("-", a));
+          console.warn('-'.repeat(10));
+        }
+      });
+
+
     // TODO
-    console.warn("Need to add ion-label in items", "https://github.com/ionic-team/ionic/blob/core/packages/ionic-angular/BREAKING.md#label-required");
-    console.warn("Need to add radio slot", "https://github.com/ionic-team/ionic/blob/core/packages/ionic-angular/BREAKING.md#slot-required");
+    console.warn("Need to add ion-label in items", "https://github.com/ionic-team/ionic/blob/master/angular/BREAKING.md#label-required");
+    console.warn("Need to add radio slot", "https://github.com/ionic-team/ionic/blob/master/angular/BREAKING.md#slot-required");
     // Can't do
-    console.error("Could not move fabs to fixed content", "https://github.com/ionic-team/ionic/blob/core/packages/ionic-angular/BREAKING.md#fixed-content");
-    console.error("Could not change icon color CSS", "https://github.com/ionic-team/ionic/blob/core/packages/ionic-angular/BREAKING.md#icon");
-    console.error("Change 'Option' to 'SelectOption' in TS", "https://github.com/ionic-team/ionic/blob/core/packages/ionic-angular/BREAKING.md#class-changed");
-    console.error("Many SCSS variables are deprecated", "https://github.com/ionic-team/ionic/blob/core/packages/ionic-angular/BREAKING.md#sass");
-    console.log('-'.repeat(20));
+    console.error("Could not move fabs to fixed content", "https://github.com/ionic-team/ionic/blob/master/angular/BREAKING.md#fixed-content");
+    console.error("Could not change icon color CSS", "https://github.com/ionic-team/ionic/blob/master/angular/BREAKING.md#icon");
+    console.error("Change 'Option' to 'SelectOption' in TS", "https://github.com/ionic-team/ionic/blob/master/angular/BREAKING.md#class-changed");
   }, 1000);
 });
